@@ -1,0 +1,13 @@
+version: 1.0
+name: telemetry-framework-apb
+description: Telemetry Framework
+bindable: False
+async: optional
+metadata:
+  displayName: Telemetry Framework (APB)
+plans:
+  - name: default
+    description: This default plan deploys telemetry-framework-apb
+    free: True
+    metadata: {}
+    parameters: []

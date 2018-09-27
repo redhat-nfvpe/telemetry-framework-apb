@@ -1,0 +1,22 @@
+apiVersion: monitoring.coreos.com/v1
+kind: Alertmanager
+metadata:
+  clusterName: ""
+  creationTimestamp: 2018-09-26T21:13:41Z
+  name: sa
+  namespace: sa-telemetry
+  resourceVersion: "9871"
+  selfLink: /apis/monitoring.coreos.com/v1/namespaces/sa-telemetry/alertmanagers/sa
+  uid: 0b1e995b-c1d1-11e8-b514-525400acc3dd
+spec:
+  nodeSelector:
+    application: sa-telemetry
+    node: blue
+  podAntiAffinity: hard
+  podMetadata:
+    labels:
+      sa-app: alertmanager
+  replicas: 3
+  securityContext:
+    nonroot: true
+  version: v0.15.1

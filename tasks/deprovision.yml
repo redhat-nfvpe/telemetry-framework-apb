@@ -1,0 +1,45 @@
+---
+- name: "Update last operation"
+  asb_last_operation:
+    description: "0%: Starting"
+  when: in_cluster
+
+- name: 'Set facts'
+  set_fact:
+    cluster: '{{ "openshift" if "openshift" in lookup("k8s", cluster_info="version") else "kubernetes" }}'
+    uniqname: '{{ _apb_service_instance_id.split("-")[0] | lower }}'
+
+- name: login to openshift
+  command: oc login -u admin -p admin
+  when: cluster=="openshift"
+
+#- name: remove SCC for prometheus-operator
+#  command: oc adm policy remove-scc-to-user privileged -z prometheus-operator -n {{ namespace }}
+#  when: cluster=="openshift"
+
+- name: create directories
+  file:
+    path: "{{ item }}"
+    state: directory
+  loop:
+    - /tmp/prometheus-operator
+    - /tmp/grafana
+    - /tmp/prometheus
+
+- name: Render templates
+  template:
+    src: "{{ item }}"
+    dest: /tmp/{{ item }}
+  loop: "{{ telemetry_templates | reverse | list }}"
+
+- name: Remove Prometheus Operator Resources
+  command: "oc delete -n {{ namespace }} -f /tmp/{{ item }} --ignore-not-found=true"
+  loop: "{{ telemetry_templates | reverse | list }}"
+  when: cluster=="openshift"
+
+- name: "Update last operation"
+  asb_last_operation:
+    description: "100%: Done"
+  when: in_cluster
+
+# vim: set ft=yaml shiftwidth=2 tabstop=2 expandtab smartindent :

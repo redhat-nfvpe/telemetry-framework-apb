@@ -1,0 +1,12 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: blue-prometheus
+  namespace: {{ namespace }}
+spec:
+  host: blue-prometheus-{{ namespace }}.apps.dev.home.61will.space
+  to:
+    kind: Service
+    name: prometheus-blue
+    weight: 100
+  wildcardPolicy: None

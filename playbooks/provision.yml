@@ -1,0 +1,9 @@
+- name: telemetry-framework-apb playbook to provision the application
+  hosts: localhost
+  gather_facts: false
+  connection: local
+  vars:
+    apb_action: provision
+  roles:
+  - role: ansibleplaybookbundle.asb-modules
+  - role: telemetry-framework-apb

@@ -1,0 +1,48 @@
+---
+# Defaults for values we could expect from a broker
+_apb_plan_id: default
+_apb_service_class_id: 0
+_apb_service_instance_id: 0
+
+app_name: "telemetry-framework-{{ _apb_service_instance_id.split('-')[0] }}"
+app_image: docker.io/nfvpe/telemetry-consumers:15.5.0-3
+namespace: "{{ lookup('env','NAMESPACE') | default('telemetry-framework', true) }}"
+
+telemetry_templates:
+  - prometheus-operator/prometheus-operator.yml.j2
+  - grafana/grafana_dashboard_definitions.yaml.j2
+  - grafana/grafana_dashboards.yaml.j2
+  - grafana/grafana_datasource.yaml.j2
+  - grafana/grafana_deployment.yaml.j2
+  - grafana/grafana.yml.j2
+  - prometheus/serviceaccount-prometheus.yaml.j2
+  - prometheus/prometheus-sa-telemetry-role.yaml.j2
+  - prometheus/prometheus-sa-telemetry-kube-system-role.yaml.j2
+  - prometheus/prometheus-sa-telemetry-default-role.yaml.j2
+  - prometheus/clusterrole-prometheus.yaml.j2
+  - prometheus/prometheus-sa-telemetry-rolebinding.yaml.j2
+  - prometheus/prometheus-sa-telemetry-kube-system-rolebinding.yaml.j2
+  - prometheus/service-prometheus.yaml.j2
+  - prometheus/route-prometheus.yaml.j2
+  - prometheus/prometheus-sa-telemetry-deployment.yaml.j2
+  - prometheus/prometheus-sa-telemetry-service-monitor.yaml.j2
+
+
+sa_telemetry_prometheus_image_version: 2.3.2
+sa_telemetry_prometheus_serviceaccount_name: prometheus-sa
+sa_telemetry_prometheus_hostname: prometheus-{{ namespace }}
+sa_telemetry_prometheus_service_name: prometheus
+sa_telemetry_prometheus_service_port: 9090
+sa_telemetry_prometheus_service_targetport: web
+sa_telemetry_prometheus_replicas: 1
+sa_telemetry_prometheus_default_interval: 10s
+sa_telemetry_prometheus_storage_size: 5G
+
+sa_telemetry_grafana_secret_user: YWRtaW4=
+sa_telemetry_grafana_secret_password: YWRtaW4=
+sa_telemetry_grafana_serviceaccount_name: grafana
+sa_telemetry_grafana_hostname: grafana-{{ namespace }}
+sa_telemetry_grafana_service_name: grafana
+sa_telemetry_grafana_service_port: 3000
+sa_telemetry_grafana_service_targetport: web
+

@@ -1,0 +1,19 @@
+apiVersion: authorization.openshift.io/v1
+kind: ClusterRole
+metadata:
+  name: prometheus-sa-telemetry
+rules:
+- apiGroups:
+  - ""
+  attributeRestrictions: null
+  resources:
+  - nodes/metrics
+  verbs:
+  - get
+- apiGroups: null
+  attributeRestrictions: null
+  nonResourceURLs:
+  - /metrics
+  resources: []
+  verbs:
+  - get
